@@ -1,26 +1,20 @@
-import type { Component } from 'solid-js';
+import { createStore } from "solid-js/store";
+import { Component, For } from "solid-js";
+import { Element, ElementType } from "./Element";
 
-import logo from './logo.svg';
-import styles from './App.module.css';
+const [rootStore, setRootStore] = createStore({
+  elements: [] as Array<ElementType>,
+});
+
+(window as any).setPageContent = (elements: ElementType[]) => {
+  setRootStore("elements", elements);
+};
 
 const App: Component = () => {
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
-      </header>
-    </div>
+    <For each={rootStore.elements}>
+      {(element) => <Element element={element} />}
+    </For>
   );
 };
 
